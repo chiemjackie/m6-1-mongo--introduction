@@ -8,7 +8,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const dbFunction = async (dbName) => {
+const getCollection = async (dbName) => {
   const client = await MongoClient(MONGO_URI, options);
 
   await client.connect();
@@ -16,10 +16,11 @@ const dbFunction = async (dbName) => {
   const db = client.db(dbName);
   console.log("connected!");
 
-  await db.collection("users").insertOne({ name: "Buck Rogers " });
+  const data = await db.collection("users").find().toArray();
+  console.log(data);
 
   client.close();
   console.log("disconnected!");
 };
 
-dbFunction();
+getCollection();
