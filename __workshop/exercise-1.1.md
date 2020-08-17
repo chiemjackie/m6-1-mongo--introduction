@@ -25,6 +25,11 @@ const { MONGO_URI } = process.env;
    - disconnect from the server
 
 ```js
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
+
 const dbFunction = async (dbName) => {
   // creates a new client
   const client = await MongoClient(MONGO_URI, options);
