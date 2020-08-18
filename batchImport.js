@@ -13,7 +13,7 @@ async function batchImport() {
 
     await client.connect();
 
-    const db = client.db("exercise_1");
+    const db = client.db("exercise-1");
 
     const dbResponse = await db.collection("greetings").insertMany(greetings);
 
