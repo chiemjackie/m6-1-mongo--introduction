@@ -9,6 +9,7 @@ const {
   createGreeting,
   getGreeting,
   getGreetings,
+  updateGreeting,
   deleteGreeting,
 } = require("./exercises/exercise-2");
 
@@ -24,14 +25,15 @@ express()
   // exercise 1
   .get("/exercise-1/users", getUsers)
   .post("/exercise-1/users", addUser)
-  .get("/*", (req, res) => res.status(404).type("txt").send("Nope"))
 
   // exercise 2
   .post("/exercise-2/greeting", createGreeting)
   .get("/exercise-2/greeting/:_id", getGreeting)
   .get("/exercise-2/greeting", getGreetings)
-  .get("/*", (req, res) => res.status(404).type("txt").send("Nope"))
+  .put("/exercise-2/greeting/:_id", updateGreeting)
   .delete("/exercise-2/greeting/:_id", deleteGreeting)
+
+  .get("/*", (req, res) => res.status(404).type("txt").send("Nope"))
 
   // handle 404s
   .use((req, res) => res.status(404).type("txt").send("🤷‍♂️"))
