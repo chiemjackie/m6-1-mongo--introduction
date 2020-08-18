@@ -30,12 +30,10 @@ const createGreeting = async (req, res) => {
 };
 
 const getGreeting = async (req, res) => {
-  const { _id } = req.params;
+  const _id = req.params;
 
   const client = await MongoClient(MONGO_URI, options);
-
   await client.connect();
-
   const db = client.db("exercise-1");
 
   db.collection("greetings").findOne({ _id }, (err, result) => {
@@ -46,4 +44,33 @@ const getGreeting = async (req, res) => {
   });
 };
 
-module.exports = { createGreeting, getGreeting };
+const getGreetings = async (req, res) => {
+  const _id = req.params._id;
+
+  const client = await MongoClient(MONGO_URI, options);
+  await client.connect();
+  const db = client.db("exercise-1");
+
+  const greetings = await db.collection("greetings").find().toArray();
+
+  let start = 0;
+  let limit = 25;
+
+  if (req.query.start !== undefined) {
+    start = Number(req.query.start);
+  }
+
+  if (req.query.limit !== undefined) {
+    limit = Number(req.query.limit);
+  }
+
+  if (greetings.length > 0) {
+    res
+      .status(200)
+      .json({ status: 200, data: greetings.slice(start, start + limit) });
+  } else {
+    res.status(404).json({ status: 404, _id, data: "Not Found" });
+  }
+};
+
+module.exports = { createGreeting, getGreeting, getGreetings };
