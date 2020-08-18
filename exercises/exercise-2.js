@@ -65,12 +65,32 @@ const getGreetings = async (req, res) => {
   }
 
   if (greetings.length > 0) {
-    res
-      .status(200)
-      .json({ status: 200, data: greetings.slice(start, start + limit) });
+    res.status(200).json({
+      status: 200,
+      start: start,
+      limit: limit,
+      data: greetings.slice(start, start + limit),
+    });
   } else {
     res.status(404).json({ status: 404, _id, data: "Not Found" });
   }
 };
 
-module.exports = { createGreeting, getGreeting, getGreetings };
+const deleteGreeting = async (req, res) => {
+  const _id = req.params._id;
+
+  const client = await MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+    const db = client.db("exercise-1");
+    const r = await db.collection("greetings").deleteOne({ _id });
+    assert.equal(1, r.deletedCount);
+    res.status(204).json("bacon");
+  } catch (err) {
+    console.log(err.stack);
+    res.status(500).json({ status: 500, data: req.body, message: err.message });
+  }
+};
+
+module.exports = { createGreeting, getGreeting, getGreetings, deleteGreeting };
