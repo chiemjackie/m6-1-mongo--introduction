@@ -40,9 +40,8 @@ const getGreeting = async (req, res) => {
     result
       ? res.status(200).json({ status: 200, _id, data: result })
       : res.status(404).json({ status: 404, _id, data: "Not Found" });
+    client.close();
   });
-
-  client.close();
 };
 
 const getGreetings = async (req, res) => {
